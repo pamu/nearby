@@ -1,28 +1,21 @@
 package com.nearby.logic
 
-import com.nearby.domain.{QuickestTravelTimes, Station, TravelTime, VisitHistory}
+import com.nearby.domain.{Station, VisitedFrom}
 
 object Implicits {
 
-  implicit class TravelTimeOps(times: QuickestTravelTimes) {
-
-    def quickestTravelTime(dest: Station): TravelTime =
-      times.travelTimes.getOrElse(dest, TravelTime.Inf)
-
-  }
-
-  implicit class PathOps(history: VisitHistory) {
+  implicit class VisitFromOps(visitedFrom: VisitedFrom) {
 
     def path(to: Station): List[Station] = {
-      val visitedFrom = history.visitedFrom
-      var path: List[Station] = to :: Nil
-      while (visitedFrom.contains(path.head) &&
-             visitedFrom(path.head) != path.head) {
-        path = visitedFrom(path.head) :: path
-      }
-      path
-    }
 
+      @scala.annotation.tailrec
+      def goUntilStart(path: List[Station]): List[Station] =
+        if (visitedFrom.value.getOrElse(path.head, path.head) != path.head)
+          goUntilStart(visitedFrom.value(path.head) :: path)
+        else path
+
+      goUntilStart(to :: Nil)
+    }
   }
 
 }

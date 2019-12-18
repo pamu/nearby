@@ -1,6 +1,7 @@
 package com.nearby
 
 import com.nearby.domain.{Connection, Query, Station, TravelTime}
+import com.nearby.logic.QueryHandler
 
 import scala.io.StdIn
 import scala.collection.mutable
@@ -19,8 +20,12 @@ object Main extends App {
     }
   }
 
-  while ({ line = Option(StdIn.readLine()); line.isDefined }) {
+  val handler = QueryHandler(connections.toList)
 
+  while ({ line = Option(StdIn.readLine()); line.isDefined }) {
+    val query = parseQuery(line.get)
+    val result = handler.handleQuery(query)
+    Console.println(result)
   }
 
   def parseEdge(line: String): Connection = {
