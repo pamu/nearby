@@ -55,8 +55,7 @@ object TravelTime {
   * @param to         Destination station.
   * @param travelTime Travel time from starting to destination.
   */
-case class
-Connection(from: Station, to: Station, travelTime: TravelTime)
+case class Connection(from: Station, to: Station, travelTime: TravelTime)
 
 /**
   * Represents travel time to station.

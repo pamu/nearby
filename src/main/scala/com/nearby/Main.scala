@@ -36,10 +36,11 @@ object Main {
     connections.toList
   }
 
-  def withLines(lineFn: String => Unit): Unit = {
+  // Default source for lines is StdIn but, but any other source can be injected.
+  def withLines(lineFn: String => Unit, source: () => String = () => StdIn.readLine()): Unit = {
     var line: Option[String] = None
     while ({
-      line = Option(StdIn.readLine()).filterNot(_.trim.isEmpty); line.isDefined
+      line = Option(source()).filterNot(_.trim.isEmpty); line.isDefined
     }) lineFn(line.get)
   }
 }
