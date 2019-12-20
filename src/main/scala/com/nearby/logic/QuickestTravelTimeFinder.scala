@@ -62,6 +62,8 @@ class QuickestTravelTimeFinderImpl(connections: List[Connection]) extends Quicke
     QuickestTravelTimesToAllStations(source, travelTimes.toMap, VisitedFrom(visitedFrom.toMap))
   }
 
+  // Update the travel time from source if smaller travel time is found for
+  // a particular station. Also update the TreeMap with new travel time.
   private def relax(edge: Connection): Unit = {
     val travelTimeFromSource = travelTimes(edge.from).plus(edge.travelTime)
 
