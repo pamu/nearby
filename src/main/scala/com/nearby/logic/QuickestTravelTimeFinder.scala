@@ -48,15 +48,16 @@ class QuickestTravelTimeFinderImpl(connections: List[Connection]) extends Quicke
       source: Station
   ): QuickestTravelTimesToAllStations = {
 
-    relaxedStations += StationTravelTime(source, TravelTime.Zero) -> ()
-
-    travelTimes += source -> TravelTime.Zero
-    visitedFrom += source -> source
+    if (stationConnections.contains(source)) {
+      relaxedStations += StationTravelTime(source, TravelTime.Zero) -> ()
+      travelTimes += source -> TravelTime.Zero
+      visitedFrom += source -> source
+    }
 
     while (relaxedStations.nonEmpty) {
       val kv = relaxedStations.min
       relaxedStations.remove(kv._1)
-      stationConnections(kv._1.station).foreach(relax)
+      stationConnections.getOrElse(kv._1.station, Nil).foreach(relax)
     }
 
     QuickestTravelTimesToAllStations(source, travelTimes.toMap, VisitedFrom(visitedFrom.toMap))
@@ -67,8 +68,8 @@ class QuickestTravelTimeFinderImpl(connections: List[Connection]) extends Quicke
   private def relax(edge: Connection): Unit = {
     val travelTimeFromSource = travelTimes(edge.from).plus(edge.travelTime)
 
-    if (implicitly[Ordering[TravelTime]].gt(travelTimes(edge.to), travelTimeFromSource)) {
-      relaxedStations.remove(StationTravelTime(edge.to, travelTimes(edge.to)))
+    if (implicitly[Ordering[TravelTime]].gt(travelTimes.getOrElse(edge.to, TravelTime.Inf), travelTimeFromSource)) {
+      relaxedStations.remove(StationTravelTime(edge.to, travelTimes.getOrElse(edge.to, TravelTime.Inf)))
       relaxedStations += StationTravelTime(edge.to, travelTimeFromSource) -> ()
       travelTimes(edge.to) = travelTimeFromSource
       visitedFrom(edge.to) = edge.from
