@@ -125,7 +125,7 @@ object Result {
     * @param travelTime Travel time.
     */
   case class RouteFound(route: List[Station], travelTime: TravelTime) extends Result {
-    override def toString: String = s"${route.mkString(" -> ")} : $travelTime"
+    override def toString: String = s"${route.mkString(" -> ")}: $travelTime"
   }
 
   /**
@@ -145,6 +145,6 @@ object Result {
     */
   case class NearbyStations(stations: List[(Station, TravelTime)]) extends Result {
     override def toString: String =
-      stations.map { case (station, travelTime) => s"$station: $travelTime"}.mkString(" ")
+      stations.map { case (station, travelTime) => s"$station: $travelTime"}.mkString(", ")
   }
 }

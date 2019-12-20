@@ -36,9 +36,10 @@ class QueryHandlerImpl(connections: List[Connection]) extends QueryHandler {
     case Query.Route(source, destination) =>
       val travelTimes = cacheResult(source)
 
-      if (travelTimes.quickestTravelTimes.contains(destination))
-        RouteFound(travelTimes.visitedFrom.path(destination), travelTimes.quickestTravelTimes(destination))
-      else Result.RouteNotFound(source, destination)
+      travelTimes.quickestTravelTimes.get(destination) match {
+        case Some(value) if value != TravelTime.Inf => RouteFound(travelTimes.visitedFrom.path(destination), value)
+        case _                                      => Result.RouteNotFound(source, destination)
+      }
 
     case Query.Nearby(source, maximumTravelTime) =>
       val travelTimes = cacheResult(source)

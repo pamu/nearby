@@ -31,6 +31,7 @@ class QuickestTravelTimeFinderSpec extends CommonSpec {
 //    E -> A: 300
 //    route A -> B
 //    nearby A, 130
+    //  https://algs4.cs.princeton.edu/lectures/44DemoDijkstra.pdf
 
     val finder: QuickestTravelTimeFinder = QuickestTravelTimeFinder(
       List(
@@ -58,6 +59,21 @@ class QuickestTravelTimeFinderSpec extends CommonSpec {
                                         Station("B") -> Station("C"),
                                         Station("C") -> Station("A"),
                                         Station("D") -> Station("A"))
+
+  }
+
+  "Travel time to disconnected station should be Inf" in {
+    val finder: QuickestTravelTimeFinder = QuickestTravelTimeFinder(
+      List(
+        Connection(Station("A"), Station("B"), TravelTime(10)),
+        Connection(Station("A"), Station("C"), TravelTime(20)),
+        Connection(Station("D"), Station("E"), TravelTime(5)),
+      )
+    )
+
+    // note that A is connected to D
+
+    finder.quickestTravelTimesToAllStations(Station("A")).quickestTravelTimes(Station("D")) mustBe TravelTime.Inf
 
   }
 }
