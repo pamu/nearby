@@ -1,37 +1,25 @@
 package com.nearby
 
-import com.nearby.domain.{Connection, Query, Station, TravelTime}
+import com.nearby.domain.{Connection, Query, Result, Station, TravelTime}
 import com.nearby.logic.QueryHandler
 
 import scala.io.StdIn
 import scala.collection.mutable
 
-object Main extends App {
+object Main {
 
-  private var line: Option[String] = None
-  val lineCount = StdIn.readLine().trim().toInt
-
-  val connections = mutable.ListBuffer.empty[Connection]
-
-  (1 to lineCount).foreach { _ =>
-    line = Option(StdIn.readLine())
-    line.foreach { edgeLine =>
-      connections += parseEdge(edgeLine)
-    }
+  def main(args: Array[String]): Unit = {
+    implicit val handler: QueryHandler = QueryHandler(allConnections(StdIn.readLine().trim.toInt))
+    withLines(line => println(handleQueryLine(line)))
   }
 
-  val handler = QueryHandler(connections.toList)
+  def handleQueryLine(line: String)(implicit handler: QueryHandler): Result =
+    handler.handle(parseQuery(line.trim))
 
-  while ({ line = Option(StdIn.readLine()); line.isDefined }) {
-    val query = parseQuery(line.get)
-    val result = handler.handleQuery(query)
-    Console.println(result)
-  }
-
-  def parseEdge(line: String): Connection = {
+  def parseConnection(line: String): Connection = {
     val Array(fromTo, time) = line.split(":").map(_.trim)
     val Array(from, to) = fromTo.split("->").map(_.trim)
-    Connection(Station(from), Station(to), TravelTime(Some(BigDecimal(time))))
+    Connection(Station(from), Station(to), TravelTime(BigDecimal(time)))
   }
 
   def parseQuery(line: String): Query = {
@@ -42,4 +30,16 @@ object Main extends App {
     }
   }
 
+  def allConnections(count: Int, source: () => String = () => StdIn.readLine()): List[Connection] = {
+    val connections = mutable.ListBuffer.empty[Connection]
+    for (_ <- 0 until count) connections += parseConnection(source().trim)
+    connections.toList
+  }
+
+  def withLines(lineFn: String => Unit): Unit = {
+    var line: Option[String] = None
+    while ({
+      line = Option(StdIn.readLine()).filterNot(_.trim.isEmpty); line.isDefined
+    }) lineFn(line.get)
+  }
 }

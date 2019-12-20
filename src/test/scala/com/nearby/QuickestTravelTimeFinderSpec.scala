@@ -1,5 +1,3 @@
 package com.nearby
 
-class QuickestTravelTimeFinderSpec extends AnyWordSpec {
-
-}
+class QuickestTravelTimeFinderSpec extends CommonSpec {}

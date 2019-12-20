@@ -7,7 +7,9 @@ package com.nearby.domain
   *
   * @param name Name identifier of the station.
   */
-case class Station(name: String) extends AnyVal
+case class Station(name: String) extends AnyVal {
+  override def toString: String = name
+}
 
 /**
   * Represents travel time.
@@ -17,18 +19,23 @@ case class Station(name: String) extends AnyVal
   */
 case class TravelTime(value: Option[BigDecimal]) {
   if (value.isDefined)
-    require(value.get > 0, "Time must be zero or positive")
+    require(value.get >= 0, "Time must be zero or positive")
 
   def plus(other: TravelTime): TravelTime = (value, other.value) match {
-    case (Some(x), Some(y)) => TravelTime(Some(x + y))
+    case (Some(x), Some(y)) => TravelTime(x + y)
     case (_, _)             => TravelTime(None)
+  }
+
+  override def toString: String = value match {
+    case Some(value) => s"$value"
+    case None => "Inf"
   }
 }
 
 object TravelTime {
 
   val Inf: TravelTime = TravelTime(None)
-  val Zero: TravelTime = TravelTime(Some(0))
+  val Zero: TravelTime = TravelTime(0)
 
   implicit val travelTimeOrdering: Ordering[TravelTime] = (x: TravelTime, y: TravelTime) =>
     (x, y) match {
@@ -37,6 +44,8 @@ object TravelTime {
       case (TravelTime(None), TravelTime(Some(_)))  => 1
       case (TravelTime(xValue), TravelTime(yValue)) => xValue compare yValue
   }
+
+  def apply(value: BigDecimal): TravelTime = TravelTime(Some(value))
 }
 
 /**
@@ -62,33 +71,43 @@ object StationTravelTime {
 }
 
 /**
- *
- * @param value
- */
-case class VisitedFrom(value: Map[Station, Station]) extends AnyVal
+  * Represents visiting order.
+  * Map whose key and value are stations.
+  * Key station is visited after visiting value value station.
+  *
+  * @param value  Map representing visiting order.
+  */
+case class VisitedFrom(value: Map[Station, Station]) extends AnyVal {
+  def visitedFrom(station: Station): Option[Station] = value.get(station)
+}
 
 /**
-  * @param station
-  * @param quickestTravelTimes
-  * @param visitedFrom
+  * Represents quickest travel times to all stations.
+  * Also has visit history for each station to get the quickest travel time.
+  *
+  * @param source               Station from which travel time to all other stations is computed.
+  * @param quickestTravelTimes  Quickest travel times to all stations from source station.
+  * @param visitedFrom          Station from which each station is visited.
   */
-case class EvaluatedStation(station: Station,
-                            quickestTravelTimes: Map[Station, TravelTime],
-                            visitedFrom: Map[Station, Station])
+case class QuickestTravelTimesToAllStations(source: Station,
+                                            quickestTravelTimes: Map[Station, TravelTime],
+                                            visitedFrom: VisitedFrom)
 
 sealed trait Query
 
 object Query {
 
   /**
-    * Represents route query
+    * Represents route query.
+    *
     * @param source      Source station
     * @param destination Destination station
     */
   case class Route(source: Station, destination: Station) extends Query
 
   /**
-    * Represents nearby query
+    * Represents nearby query.
+    *
     * @param source            Source station
     * @param maximumTravelTime Maximum travel time
     */
@@ -100,15 +119,32 @@ sealed trait Result
 object Result {
 
   /**
+    * Represents route from source to destination with travel time.
     *
-    * @param quickestTravelTimes
+    * @param route      List of stations visited in order.
+    * @param travelTime Travel time.
     */
-  case class RouteFound(quickestTravelTimes: Map[Station, TravelTime]) extends Result
-  case object NotRouteFound extends Result
+  case class RouteFound(route: List[Station], travelTime: TravelTime) extends Result {
+    override def toString: String = s"${route.mkString(" -> ")} : $travelTime"
+  }
 
   /**
+    * Represents not existent route.
     *
-    * @param stations
+    * @param source      Source station.
+    * @param destination Destination station to which route is requested.
     */
-  case class NearbyStations(stations: List[(Station, TravelTime)]) extends Result
+  case class RouteNotFound(source: Station, destination: Station) extends Result {
+    override def toString: String = s"Error: No route from $source to $destination"
+  }
+
+  /**
+    * Nearby stations sorted by travel time from source station.
+    *
+    * @param stations  Stations list sorted by travel time from source station.
+    */
+  case class NearbyStations(stations: List[(Station, TravelTime)]) extends Result {
+    override def toString: String =
+      stations.map { case (station, travelTime) => s"$station: $travelTime"}.mkString(" ")
+  }
 }
