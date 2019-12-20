@@ -17,13 +17,15 @@ trait QuickestTravelTimeFinder {
 }
 
 /**
+  * Dijkstra's algorithm to finder quickest travel time from source station to
+  * all other stations along with the visiting order.
   *
-  * @param connections
+  * @param connections  List of directed edges.
+  *                     (Edge represents travel time between two stations)
   */
 class QuickestTravelTimeFinderImpl(connections: List[Connection]) extends QuickestTravelTimeFinder {
 
-  private val stationConnections: Map[Station, List[Connection]] =
-    connections.groupBy(_.from)
+  private val stationConnections: Map[Station, List[Connection]] = connections.groupBy(_.from)
 
   private val travelTimes: MutableMap[Station, TravelTime] = {
     val times = MutableMap.empty[Station, TravelTime]
@@ -35,18 +37,21 @@ class QuickestTravelTimeFinderImpl(connections: List[Connection]) extends Quicke
   private val relaxedStations = mutable.TreeMap.empty[StationTravelTime, Unit]
 
   /**
+    * Finds quickest travel times from source to all other stations.
+    * Unreachable stations are represented using TravelTime.Inf.
     *
-    * @param start
-    * @return
+    * @param source Source station from which travel times to all other stations
+    *               is computed.
+    * @return       QuickestTravelTimesToAllStations
     */
   override def quickestTravelTimesToAllStations(
-      start: Station
+      source: Station
   ): QuickestTravelTimesToAllStations = {
 
-    relaxedStations += StationTravelTime(start, TravelTime.Zero) -> ()
+    relaxedStations += StationTravelTime(source, TravelTime.Zero) -> ()
 
-    travelTimes += start -> TravelTime.Zero
-    visitedFrom += start -> start
+    travelTimes += source -> TravelTime.Zero
+    visitedFrom += source -> source
 
     while (relaxedStations.nonEmpty) {
       val kv = relaxedStations.min
@@ -54,7 +59,7 @@ class QuickestTravelTimeFinderImpl(connections: List[Connection]) extends Quicke
       stationConnections(kv._1.station).foreach(relax)
     }
 
-    QuickestTravelTimesToAllStations(start, travelTimes.toMap, VisitedFrom(visitedFrom.toMap))
+    QuickestTravelTimesToAllStations(source, travelTimes.toMap, VisitedFrom(visitedFrom.toMap))
   }
 
   private def relax(edge: Connection): Unit = {

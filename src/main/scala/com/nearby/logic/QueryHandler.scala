@@ -11,8 +11,14 @@ trait QueryHandler {
 }
 
 /**
+  * Query handler handles two types of queries.
+  * 1. Route query
+  * 2. Nearby query
+  * It also caches the computed quickest travel times from particular source
+  * station for future queries.
   *
-  * @param connections
+  * @param connections  List of directed edges
+  *                     (Edge represents travel time between two stations)
   */
 class QueryHandlerImpl(connections: List[Connection]) extends QueryHandler {
 
@@ -20,6 +26,12 @@ class QueryHandlerImpl(connections: List[Connection]) extends QueryHandler {
   private val finder: QuickestTravelTimeFinder = new QuickestTravelTimeFinderImpl(connections)
   private val cache: MutableMap[Station, QuickestTravelTimesToAllStations] = MutableMap.empty
 
+  /**
+    * Handle query and return result.
+    *
+    * @param query Query ADT to handle
+    * @return      Result ADT
+    */
   override def handle(query: Query): Result = query match {
     case Query.Route(source, destination) =>
       val travelTimes = cacheResult(source)
@@ -43,6 +55,7 @@ class QueryHandlerImpl(connections: List[Connection]) extends QueryHandler {
       Result.NearbyStations(stationsSortedByTravelTime)
   }
 
+  // Cache the computed result for future use.
   private def cacheResult(source: Station): QuickestTravelTimesToAllStations =
     cache.getOrElseUpdate(source, finder.quickestTravelTimesToAllStations(source))
 }
