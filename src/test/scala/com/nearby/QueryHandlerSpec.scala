@@ -16,7 +16,7 @@ class QueryHandlerSpec extends WordSpecWithMatchers {
   }
 
   "No route to unknown station" in {
-    // Note 1000 station is not present in input
+    // Note "1000" station is not present in connections
     Main.handleQueryLine("route 0 -> 1000").toString mustBe "Error: No route from 0 to 1000"
   }
 
