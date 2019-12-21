@@ -1,7 +1,6 @@
 # nearby
-Nearby
 
-Uses [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) to answer
+Nearby uses [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) to answer
 route and nearby queries.
 
 # Code structure
@@ -21,7 +20,7 @@ Station, TravelTime, Query, Result etc are declared here.
 
 ##### QueryHandler
 
-Handles query and caches results for answering future queries.
+Handles query and also caches intermediate results for answering future queries.
 
 
 ##### QuickestTravelTimeFinder
@@ -44,8 +43,9 @@ Output:
 
 - Main parses input lines into connections and queries.
 
-- Connections are passed for processing to query handler. Then,
-queries are passed to QueryHandler which returns results.
+- Connections are used by query handler to answer queries.
+
+- Queries are also passed to query handler for results.
 
 ##### QueryHandler
 
@@ -53,7 +53,7 @@ queries are passed to QueryHandler which returns results.
 
 - Results are computed using QuickestTravelTimeFinder instance.
 
-- Results are then cached for addressing future queries.
+- Intermediate results are then cached for addressing future queries.
 
 ##### QuickestTravelTimeFinder
 
