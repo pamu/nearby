@@ -3,6 +3,24 @@
 Nearby uses [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) to answer
 route and nearby queries.
 
+# Summary
+
+- Query ADT is used to represent (Route and Nearby queries).
+
+- Result ADT represents corresponding results for above queries.
+
+- Connection (edges) and queries are read from Stdin and sent to QueryHandler.
+
+- QueryHandler uses QuickestTravelTimeFinder (which internally uses Dijkstra's algorithm)
+to convert Query into Result.
+
+- `toString` method on Result gives output in correct format which is
+printed to Stdout.
+
+# Testing library
+
+- Scala test
+
 # Code structure
 
 ## Main
