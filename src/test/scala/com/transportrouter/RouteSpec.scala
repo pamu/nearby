@@ -7,10 +7,10 @@ class RouteSpec extends WordSpecWithMatchers {
 
   private val visitedFrom = VisitedFrom(
     Map(Station("E") -> Station("D"),
-        Station("D") -> Station("C"),
-        Station("C") -> Station("B"),
-        Station("B") -> Station("A"),
-        Station("A") -> Station("A"))
+      Station("D") -> Station("C"),
+      Station("C") -> Station("B"),
+      Station("B") -> Station("A"),
+      Station("A") -> Station("A"))
   )
 
   "Return source station if source path is requested" in {

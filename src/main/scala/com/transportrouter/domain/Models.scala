@@ -24,7 +24,7 @@ case class TravelTime(value: Option[BigDecimal]) {
 
   def plus(other: TravelTime): TravelTime = (value, other.value) match {
     case (Some(x), Some(y)) => TravelTime(x + y)
-    case (_, _)             => TravelTime(None)
+    case (_, _) => TravelTime(None)
   }
 
   override def toString: String = value match {
@@ -40,11 +40,11 @@ object TravelTime {
 
   implicit val travelTimeOrdering: Ordering[TravelTime] = (x: TravelTime, y: TravelTime) =>
     (x, y) match {
-      case (TravelTime(None), TravelTime(None))     => 0
-      case (TravelTime(Some(_)), TravelTime(None))  => -1
-      case (TravelTime(None), TravelTime(Some(_)))  => 1
+      case (TravelTime(None), TravelTime(None)) => 0
+      case (TravelTime(Some(_)), TravelTime(None)) => -1
+      case (TravelTime(None), TravelTime(Some(_))) => 1
       case (TravelTime(xValue), TravelTime(yValue)) => xValue compare yValue
-  }
+    }
 
   def apply(value: BigDecimal): TravelTime = TravelTime(Some(value))
 }
@@ -61,8 +61,8 @@ case class Connection(from: Station, to: Station, travelTime: TravelTime)
 /**
   * Represents travel time to station.
   *
-  * @param station  Destination station from start (source).
-  * @param time     Time taken to reach station.
+  * @param station Destination station from start (source).
+  * @param time    Time taken to reach station.
   */
 case class StationTravelTime(station: Station, time: TravelTime)
 
@@ -76,7 +76,7 @@ object StationTravelTime {
   * Map whose key and value are stations.
   * Key station is visited after visiting value value station.
   *
-  * @param value  Map representing visiting order.
+  * @param value Map representing visiting order.
   */
 case class VisitedFrom(value: Map[Station, Station]) extends AnyVal {
   def visitedFrom(station: Station): Option[Station] = value.get(station)
@@ -86,9 +86,9 @@ case class VisitedFrom(value: Map[Station, Station]) extends AnyVal {
   * Represents quickest travel times to all stations.
   * Also has visit history for each station to get the quickest travel time.
   *
-  * @param source               Station from which travel time to all other stations is computed.
-  * @param quickestTravelTimes  Quickest travel times to all stations from source station.
-  * @param visitedFrom          Station from which each station is visited.
+  * @param source              Station from which travel time to all other stations is computed.
+  * @param quickestTravelTimes Quickest travel times to all stations from source station.
+  * @param visitedFrom         Station from which each station is visited.
   */
 case class QuickestTravelTimesToAllStations(source: Station,
                                             quickestTravelTimes: Map[Station, TravelTime],
@@ -113,6 +113,7 @@ object Query {
     * @param maximumTravelTime Maximum travel time
     */
   case class Nearby(source: Station, maximumTravelTime: TravelTime) extends Query
+
 }
 
 sealed trait Result
@@ -142,10 +143,11 @@ object Result {
   /**
     * Nearby stations sorted by travel time from source station.
     *
-    * @param stations  Stations list sorted by travel time from source station.
+    * @param stations Stations list sorted by travel time from source station.
     */
   case class NearbyStations(stations: List[(Station, TravelTime)]) extends Result {
     override def toString: String =
-      stations.map { case (station, travelTime) => s"$station: $travelTime"}.mkString(", ")
+      stations.map { case (station, travelTime) => s"$station: $travelTime" }.mkString(", ")
   }
+
 }

@@ -2,7 +2,14 @@ package com.transportrouter.logic
 
 import Implicits._
 import com.transportrouter.domain.Result.RouteFound
-import com.transportrouter.domain.{Connection, Query, QuickestTravelTimesToAllStations, Result, Station, TravelTime, VisitedFrom}
+import com.transportrouter.domain.{
+  Connection,
+  Query,
+  QuickestTravelTimesToAllStations,
+  Result,
+  Station,
+  TravelTime
+}
 
 import scala.collection.mutable.{Map => MutableMap}
 
@@ -17,8 +24,8 @@ trait QueryHandler {
   * It also caches the computed quickest travel times from particular source
   * station for future queries.
   *
-  * @param connections  List of directed edges
-  *                     (Edge represents travel time between two stations)
+  * @param connections List of directed edges
+  *                    (Edge represents travel time between two stations)
   */
 class QueryHandlerImpl(connections: List[Connection]) extends QueryHandler {
 
@@ -30,7 +37,7 @@ class QueryHandlerImpl(connections: List[Connection]) extends QueryHandler {
     * Handle query and return result.
     *
     * @param query Query ADT to handle
-    * @return      Result ADT
+    * @return Result ADT
     */
   override def handle(query: Query): Result = query match {
     case Query.Route(source, destination) =>
@@ -38,7 +45,7 @@ class QueryHandlerImpl(connections: List[Connection]) extends QueryHandler {
 
       travelTimes.quickestTravelTimes.get(destination) match {
         case Some(value) if value != TravelTime.Inf => RouteFound(travelTimes.visitedFrom.path(destination), value)
-        case _                                      => Result.RouteNotFound(source, destination)
+        case _ => Result.RouteNotFound(source, destination)
       }
 
     case Query.Nearby(source, maximumTravelTime) =>

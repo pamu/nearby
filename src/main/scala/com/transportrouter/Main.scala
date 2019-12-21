@@ -25,7 +25,7 @@ object Main {
   def parseQuery(line: String): Query = {
     val parts = line.split("\\s+").map(_.trim).filterNot(_.isEmpty)
     parts(0) match {
-      case "route"  => Query.Route(Station(parts(1)), Station(parts(3)))
+      case "route" => Query.Route(Station(parts(1)), Station(parts(3)))
       case "nearby" => Query.Nearby(Station(parts(1).split(",")(0)), TravelTime(Some(BigDecimal(parts(2)))))
     }
   }
@@ -39,8 +39,9 @@ object Main {
   // Default source for lines is StdIn but, but any other source can be injected.
   def withLines(lineFn: String => Unit, source: () => String = () => StdIn.readLine()): Unit = {
     var line: Option[String] = None
-    while ({
-      line = Option(source()).filterNot(_.trim.isEmpty); line.isDefined
+    while ( {
+      line = Option(source()).filterNot(_.trim.isEmpty);
+      line.isDefined
     }) lineFn(line.get)
   }
 }

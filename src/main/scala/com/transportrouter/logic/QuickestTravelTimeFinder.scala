@@ -20,8 +20,8 @@ trait QuickestTravelTimeFinder {
   * Dijkstra's algorithm to finder quickest travel time from source station to
   * all other stations along with the visiting order.
   *
-  * @param connections  List of directed edges.
-  *                     (Edge represents travel time between two stations)
+  * @param connections List of directed edges.
+  *                    (Edge represents travel time between two stations)
   */
 class QuickestTravelTimeFinderImpl(connections: List[Connection]) extends QuickestTravelTimeFinder {
 
@@ -29,7 +29,9 @@ class QuickestTravelTimeFinderImpl(connections: List[Connection]) extends Quicke
 
   private val travelTimes: MutableMap[Station, TravelTime] = {
     val times = MutableMap.empty[Station, TravelTime]
-    connections.foreach { times += _.from -> TravelTime.Inf }
+    connections.foreach {
+      times += _.from -> TravelTime.Inf
+    }
     times
   }
 
@@ -42,11 +44,11 @@ class QuickestTravelTimeFinderImpl(connections: List[Connection]) extends Quicke
     *
     * @param source Source station from which travel times to all other stations
     *               is computed.
-    * @return       QuickestTravelTimesToAllStations
+    * @return QuickestTravelTimesToAllStations
     */
   override def quickestTravelTimesToAllStations(
-      source: Station
-  ): QuickestTravelTimesToAllStations = {
+                                                 source: Station
+                                               ): QuickestTravelTimesToAllStations = {
 
     if (stationConnections.contains(source)) {
       relaxedStations += StationTravelTime(source, TravelTime.Zero) -> ()
