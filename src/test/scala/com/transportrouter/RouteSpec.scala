@@ -1,7 +1,7 @@
-package com.nearby
+package com.transportrouter
 
-import com.nearby.domain.{Station, VisitedFrom}
-import com.nearby.logic.Implicits._
+import com.transportrouter.domain.{Station, VisitedFrom}
+import com.transportrouter.logic.Implicits._
 
 class RouteSpec extends WordSpecWithMatchers {
 

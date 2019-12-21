@@ -1,6 +1,6 @@
-package com.nearby
+package com.transportrouter
 
-import com.nearby.domain.{Connection, Station, TravelTime}
+import com.transportrouter.domain.{Connection, Station, TravelTime}
 
 object Common {
 

@@ -1,7 +1,7 @@
-package com.nearby
+package com.transportrouter
 
-import com.nearby.domain.{Connection, Query, Result, Station, TravelTime}
-import com.nearby.logic.QueryHandler
+import com.transportrouter.domain.{Connection, Query, Result, Station, TravelTime}
+import com.transportrouter.logic.QueryHandler
 
 import scala.io.StdIn
 import scala.collection.mutable

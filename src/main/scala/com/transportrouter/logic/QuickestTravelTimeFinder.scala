@@ -1,6 +1,6 @@
-package com.nearby.logic
+package com.transportrouter.logic
 
-import com.nearby.domain.{
+import com.transportrouter.domain.{
   Connection,
   QuickestTravelTimesToAllStations,
   Station,

@@ -1,7 +1,7 @@
-package com.nearby
+package com.transportrouter
 
-import com.nearby.domain.{Connection, Station, TravelTime}
-import com.nearby.logic.QuickestTravelTimeFinder
+import com.transportrouter.domain.{Connection, Station, TravelTime}
+import com.transportrouter.logic.QuickestTravelTimeFinder
 
 class QuickestTravelTimeFinderSpec extends WordSpecWithMatchers {
 

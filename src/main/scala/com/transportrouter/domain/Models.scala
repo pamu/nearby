@@ -1,4 +1,4 @@
-package com.nearby.domain
+package com.transportrouter.domain
 
 /**
   * Represents station.

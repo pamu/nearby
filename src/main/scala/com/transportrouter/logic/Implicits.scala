@@ -1,6 +1,6 @@
-package com.nearby.logic
+package com.transportrouter.logic
 
-import com.nearby.domain.{Station, VisitedFrom}
+import com.transportrouter.domain.{Station, VisitedFrom}
 
 object Implicits {
 

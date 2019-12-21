@@ -1,8 +1,8 @@
-package com.nearby.logic
+package com.transportrouter.logic
 
 import Implicits._
-import com.nearby.domain.Result.RouteFound
-import com.nearby.domain.{Connection, Query, QuickestTravelTimesToAllStations, Result, Station, TravelTime, VisitedFrom}
+import com.transportrouter.domain.Result.RouteFound
+import com.transportrouter.domain.{Connection, Query, QuickestTravelTimesToAllStations, Result, Station, TravelTime, VisitedFrom}
 
 import scala.collection.mutable.{Map => MutableMap}
 

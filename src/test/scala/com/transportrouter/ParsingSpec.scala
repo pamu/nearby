@@ -1,6 +1,6 @@
-package com.nearby
+package com.transportrouter
 
-import com.nearby.domain.{Connection, Query, Station, TravelTime}
+import com.transportrouter.domain.{Connection, Query, Station, TravelTime}
 
 class ParsingSpec extends WordSpecWithMatchers {
 
