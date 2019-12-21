@@ -1,4 +1,4 @@
-name := "nearby"
+name := "transport-router"
 
 version := "0.1"
 
