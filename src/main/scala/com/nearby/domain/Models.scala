@@ -14,6 +14,7 @@ case class Station(name: String) extends AnyVal {
 /**
   * Represents travel time.
   * None represents practically infinite time.
+  * Why use BigDecimal? (https://stackoverflow.com/questions/3413448/double-vs-bigdecimal)
   *
   * @param value Time to travel.
   */
