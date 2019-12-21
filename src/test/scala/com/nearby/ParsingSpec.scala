@@ -2,7 +2,7 @@ package com.nearby
 
 import com.nearby.domain.{Connection, Query, Station, TravelTime}
 
-class ParsingSpec extends CommonSpec {
+class ParsingSpec extends WordSpecWithMatchers {
 
   "Parse connection correctly" in {
     Main.parseConnection("A -> E: 123.33") mustEqual

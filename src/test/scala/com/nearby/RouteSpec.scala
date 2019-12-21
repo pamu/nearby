@@ -3,7 +3,7 @@ package com.nearby
 import com.nearby.domain.{Station, VisitedFrom}
 import com.nearby.logic.Implicits._
 
-class RouteSpec extends CommonSpec {
+class RouteSpec extends WordSpecWithMatchers {
 
   private val visitedFrom = VisitedFrom(
     Map(Station("E") -> Station("D"),
