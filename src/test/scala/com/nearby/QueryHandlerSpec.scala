@@ -42,4 +42,33 @@ class QueryHandlerSpec extends WordSpecWithMatchers {
     Main.handleQueryLine("nearby 0, 25").toString mustBe "1: 5, 7: 8, 4: 9, 5: 13, 2: 14, 3: 17, 6: 25"
   }
 
+  "Return correct results for given test data" in {
+    //    8
+    //    A -> B: 240
+    //    A -> C: 70
+    //    A -> D: 120
+    //    C -> B: 60
+    //    D -> E: 480
+    //    C -> E: 240
+    //    B -> E: 210
+    //    E -> A: 300
+    //    route A -> B
+    //    nearby A, 130
+
+    implicit val handler: QueryHandler = QueryHandler(
+      List(
+        Connection(Station("A"), Station("B"), TravelTime(240)),
+        Connection(Station("A"), Station("C"), TravelTime(70)),
+        Connection(Station("A"), Station("D"), TravelTime(120)),
+        Connection(Station("C"), Station("B"), TravelTime(60)),
+        Connection(Station("D"), Station("E"), TravelTime(480)),
+        Connection(Station("C"), Station("E"), TravelTime(240)),
+        Connection(Station("B"), Station("E"), TravelTime(210)),
+        Connection(Station("E"), Station("A"), TravelTime(300))
+      ))
+
+    Main.handleQueryLine("route A -> B").toString mustBe "A -> C -> B: 130"
+    Main.handleQueryLine("nearby A, 130").toString mustBe "C: 70, D: 120, B: 130"
+  }
+
 }
